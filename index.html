@@ -18,30 +18,33 @@
       <input id="input"
       class="input"
       type="text"
-      placeholder="Filtrar Personaje"
+      placeholder="Buscar Por Nombre"
+      required
       >
-  
       <button id="btnPersonaje" class="boton">Buscar</button>
+      <label for="frutas">Elige una specie:</label>
+      <select  id="Filtrar">
+        <option value="">Todos</option>
+        <option value="Human">Human</option>
+        <option value="Alien">Alien</option>
+      </select>
     </form>
 
-   
-
-
+    <div id="alert" class="alerta"></div>
+      
     <div class="container my-5">
       <section class="d-flex align-items-center d-none" id="loading">
         <strong>Cargando...</strong>
         <div
-          class="spinner-border ms-auto"
-          role="status"
-          aria-hidden="true"
+        class="spinner-border ms-auto"
+        role="status"
+        aria-hidden="true"
         ></div>
       </section>
 
       <section class="row" id="card-dinamicas">
-
       </section>
-
-
+   
       <template id="template-card">
         <article class="col-12 col-md-6 col-lg-3 mb-3">
           <div class="card-text-center shadow">
@@ -57,3 +60,9 @@
     <script src="ricky and morty.js"></script>
   </body>
 </html>
+
+
+
+
+
+

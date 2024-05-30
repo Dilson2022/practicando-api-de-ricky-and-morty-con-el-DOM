@@ -1,10 +1,12 @@
 const boton = document.getElementById("btnPersonaje");
+const filtrar = document.getElementById("Filtrar")
 
 let data;
 
 document.addEventListener("DOMContentLoaded", () => {
   fetchData();
-  boton.addEventListener("click", (e) => obtenerPersonajesFiltrados(e, data));
+  boton.addEventListener("click", (e) => obtenerPersonajePorSuName(e, data));
+  filtrar.addEventListener("change", () => filtrarPersonajes(data))
 });
 
 //  HACEMOS LA PETICION A LA URL, PARA OBTENER LOS CHARACTER
@@ -54,28 +56,47 @@ const loadingData = (estado) => {
   }
 };
 
-const filtrarCharacter = (data, species) => {
-  //console.log(data, species);
+const BuscarCharacter = (data, name) => {
   if (data) {
     return data.results.filter(
-      (character) => character.species.toLowerCase() === species.toLowerCase()
+      (character) => character.name.toLowerCase() === name.toLowerCase()
     );
   } else {
     return [];
   }
 };
 
-const obtenerPersonajesFiltrados = (e, data) => {
+const obtenerPersonajePorSuName = (e, data) => {
   e.preventDefault(); // Evitar que la página se recargue
-  //console.log(data);
   const input = document.getElementById("input").value.trim();
-  //console.log(input);
+  const alerta = document.getElementById("alert");
   if (input !== "") {
-    const personajesFiltrado = filtrarCharacter(data, input);
-    pintarData({ results: personajesFiltrado });
+    const BuascarPorName = BuscarCharacter(data, input);
+    if (BuascarPorName.length > 0) {
+      pintarData({ results: BuascarPorName });
+      alerta.style.display = "none"; // Ocultar la alerta si se encuentran personajes
+    } else {
+      //const alerta = document.getElementById("alert")
+      alerta.textContent = `Personaje con el nombre "${input}" no existe`
+      alerta.style.display = "block"; // Mostrar la alerta si no se encuentra el personaje
+
+      
+    }
+
     document.getElementById("input").value = "";
   } else {
     // Si el campo está vacío, mostramos todos los personajes nuevamente
     pintarData(data);
+    alerta.style.display = "none"; // Ocultar la alerta si se muestra todo
   }
 };
+
+const filtrarPersonajes = (data) => {
+  const filtrar = document.getElementById("Filtrar").value;
+  if (filtrar === "") {
+    pintarData(data)
+  } else {
+    const filtrado = data.results.filter(character => character.species === filtrar)
+    pintarData({ results: filtrado }) 
+  }
+}
