@@ -73,6 +73,7 @@ const obtenerPersonajesFiltrados = (e, data) => {
   if (input !== "") {
     const personajesFiltrado = filtrarCharacter(data, input);
     pintarData({ results: personajesFiltrado });
+    document.getElementById("input").value = "";
   } else {
     // Si el campo está vacío, mostramos todos los personajes nuevamente
     pintarData(data);
