@@ -1,21 +1,24 @@
 const boton = document.getElementById("btnPersonaje");
-const filtrar = document.getElementById("Filtrar")
+const filtrar = document.getElementById("Filtrar");
+const paginas = document.getElementById("pagina");
 
 let data;
 
 document.addEventListener("DOMContentLoaded", () => {
   fetchData();
   boton.addEventListener("click", (e) => obtenerPersonajePorSuName(e, data));
-  filtrar.addEventListener("change", () => filtrarPersonajes(data))
+  filtrar.addEventListener("change", () => filtrarPersonajes(data));
+  paginas.addEventListener("change", paginado);
 });
 
 //  HACEMOS LA PETICION A LA URL, PARA OBTENER LOS CHARACTER
-const fetchData = async () => {
+const fetchData = async (pagina) => {
   try {
     loadingData(true);
-    const res = await fetch("https://rickandmortyapi.com/api/character");
+    const res = await fetch(
+      "https://rickandmortyapi.com/api/character/?page=" + pagina
+    );
     data = await res.json();
-    //console.log(data.results);
 
     pintarData(data);
   } catch (error) {
@@ -37,7 +40,7 @@ const pintarData = (data) => {
   data.results.forEach((item) => {
     //console.log(item);
     const clone = templateCard.cloneNode(true);
-    clone.querySelector("h5").textContent = item.name;
+    clone.querySelector("h3").textContent = item.name;
     clone.querySelector("p").textContent = item.species;
     clone.querySelector("img").setAttribute("src", item.image);
 
@@ -76,11 +79,8 @@ const obtenerPersonajePorSuName = (e, data) => {
       pintarData({ results: BuascarPorName });
       alerta.style.display = "none"; // Ocultar la alerta si se encuentran personajes
     } else {
-      //const alerta = document.getElementById("alert")
-      alerta.textContent = `Personaje con el nombre "${input}" no existe`
+      alerta.textContent = `Personaje con el nombre "${input}" no existe`;
       alerta.style.display = "block"; // Mostrar la alerta si no se encuentra el personaje
-
-      
     }
 
     document.getElementById("input").value = "";
@@ -94,9 +94,17 @@ const obtenerPersonajePorSuName = (e, data) => {
 const filtrarPersonajes = (data) => {
   const filtrar = document.getElementById("Filtrar").value;
   if (filtrar === "") {
-    pintarData(data)
+    pintarData(data);
   } else {
-    const filtrado = data.results.filter(character => character.species === filtrar)
-    pintarData({ results: filtrado }) 
+    const filtrado = data.results.filter(
+      (character) => character.species === filtrar
+    );
+    pintarData({ results: filtrado });
   }
-}
+};
+
+const paginado = () => {
+  const paginado = document.getElementById("pagina").value;
+  // console.log(pagina)
+  fetchData(paginado);
+};
